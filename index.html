@@ -3,24 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>我的个人主页</title>
+  <title>Lion 的个人主页</title>
 
   <style>
-    /* 背景渐变动画 */
+    /* 星空粒子背景 Canvas */
+    #stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: black;
+    }
+
+    /* 背景渐变动画（叠加在星空上） */
     body {
       margin: 0;
       font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(120deg, #6a11cb, #2575fc);
-      background-size: 300% 300%;
-      animation: gradientMove 12s ease infinite;
       color: white;
       text-align: center;
-    }
-
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      background: transparent;
     }
 
     /* 主容器淡入动画 */
@@ -56,7 +59,7 @@
 
     /* 卡片 */
     .card {
-      background: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.12);
       padding: 25px;
       border-radius: 16px;
       margin: 25px 0;
@@ -108,6 +111,10 @@
 </head>
 
 <body>
+
+  <!-- 星空粒子背景 -->
+  <canvas id="stars"></canvas>
+
   <div class="container">
     <div class="avatar"></div>
 
@@ -116,13 +123,17 @@
 
     <div class="card">
       <h2>✨ 关于我</h2>
-      <p>这里写你的简介：职业、兴趣、技能、经历等。</p>
+      <p>
+        我是一名专注于 **Java 后端开发** 的工程师，熟悉 Spring Boot、Spring Cloud、MyBatis、Redis、MySQL 等主流技术栈。
+        热衷于高并发系统设计、微服务架构、分布式解决方案以及自动化部署。
+        喜欢探索新技术，也热爱把复杂问题拆解成优雅的工程实现。
+      </p>
     </div>
 
     <div class="card">
       <h2>🚀 我的项目</h2>
-      <p>展示你的 GitHub 项目、作品集或博客。</p>
-      <a class="btn" href="https://github.com/你的GitHub" target="_blank">访问我的 GitHub</a>
+      <p>这里展示我的 GitHub 项目、学习记录和个人作品。</p>
+      <a class="btn" href="https://github.com/Lion202305" target="_blank">访问我的 GitHub</a>
     </div>
 
     <div class="card">
@@ -130,7 +141,55 @@
       <p>Email: 15707698064@163.com</p>
     </div>
 
-    <footer>© 2025 Lion/footer>
+    <footer>© 2025 Lion</footer>
   </div>
+
+  <!-- 星空粒子背景脚本 -->
+  <script>
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.onresize = resize;
+
+    const stars = [];
+    const count = 200;
+
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2,
+        dx: (Math.random() - 0.5) * 0.2,
+        dy: (Math.random() - 0.5) * 0.2
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "white";
+
+      stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        s.x += s.dx;
+        s.y += s.dy;
+
+        if (s.x < 0 || s.x > canvas.width) s.dx *= -1;
+        if (s.y < 0 || s.y > canvas.height) s.dy *= -1;
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+
 </body>
 </html>
